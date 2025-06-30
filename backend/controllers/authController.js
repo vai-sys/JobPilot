@@ -33,7 +33,7 @@ exports.loginUser = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ error: "Invalid email or password" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id ,email:user.email }, process.env.JWT_SECRET, {
       expiresIn: "7d"
     });
 
@@ -60,6 +60,7 @@ exports.loginUser = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const userId = req.user.id;
+   
     const user = await User.findById(userId).select("-password");
     res.status(200).json(user);
   } catch (err) {
